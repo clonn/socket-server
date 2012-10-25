@@ -1,0 +1,15 @@
+{
+    "name": "application-name"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+				"express": "2.5.8"
+			, "jade": ">= 0.0.1"
+			, "socket.io": ">= 0.0.1"
+			, "socket.io-client": ">= 0.0.1"
+			, "bouncy": ">= 0.0.1"
+			, "connect-redis": "1.x"
+			, "redis": "*"
+			, "hiredis": "*"
+  }
+}

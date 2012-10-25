@@ -1,0 +1,14 @@
+{
+  "io": {
+    "store": "MemoryStore"
+  , "volatile": true
+  , "redis": {
+      "host": "10.0.0.1"
+    , "port": 6379
+    }
+  }
+, "backend": [
+    ["10.0.0.1", 3000]
+  , ["10.0.0.1", 3000]
+  ]
+}
