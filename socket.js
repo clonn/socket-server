@@ -9,13 +9,13 @@ var socket = require('socket.io')
   , Store = socket[params.io.store];
 
 module.exports = function(app) {
-  
+
   /**
  *    * Listening Socket.IO
  *       */
-  
+
   var storeOpts = {};
-  
+
   if (Store instanceof socket.RedisStore) {
     storeOpts = {
       redisPub: redis.createClient(params.io.redis.port, params.io.redis.host)
@@ -23,15 +23,15 @@ module.exports = function(app) {
     , redisClient: redis.createClient(params.io.redis.port, params.io.redis.host)
     }
   }
-  
+
   var io = socket.listen(app, {
-        store: new Store(storeOpts)
-      });
-  
+    store: new Store(storeOpts)
+  });
+
   /**
  *    * Configure Socket.IO
  *       */
-  
+
   io.configure(function() {
     io.set('transports', ['websocket']);
   });
@@ -39,10 +39,14 @@ module.exports = function(app) {
   /**
  *    * Routes.
  *       */
-  
+
   io.sockets.on('connection', function(client) {
     io.sockets.emit('stat', Object.keys(io.connected).length);
+
+    client.on('disconnect', function () {
+      io.sockets.emit('user',Object.keys(io.connected).length);
+    });
   });
-  
+
   return io;
 };
