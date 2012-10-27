@@ -24,27 +24,58 @@ module.exports = function(app) {
     }
   }
 
+  /*
   var io = socket.listen(app, {
     store: new Store(storeOpts)
   });
+  */
+  var io = socket.listen(app);
 
   /**
  *    * Configure Socket.IO
  *       */
 
+  /*
   io.configure(function() {
     io.set('transports', ['websocket']);
   });
+  */
 
+  io.configure(function() {
+    io.set('close timeout', 5);
+      /*
+    io.set('close' :{
+              'timeout' :2
+            },
+            'heartbeat' : {
+              'timeout' :2
+            }
+    );
+    */
+  });
   /**
  *    * Routes.
  *       */
 
-  io.sockets.on('connection', function(client) {
-    io.sockets.emit('stat', Object.keys(io.connected).length);
+  var total = 0;
 
-    client.on('disconnect', function () {
-      io.sockets.emit('user',Object.keys(io.connected).length);
+  var checkFn = function (number) {
+    if (total !== number) {
+      total = number;
+      io.sockets.emit('user', number);
+    }
+  };
+
+  io.sockets.on('connection', function(client) {
+
+    var number = Object.keys(io.connected).length;
+
+    io.sockets.emit('stat', number);
+
+
+    client.on('disconnect', function (data) {
+      number = Object.keys(io.connected).length;
+      checkFn(number);
     });
   });
 
